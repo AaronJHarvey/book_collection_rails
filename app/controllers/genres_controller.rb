@@ -4,7 +4,7 @@ class GenresController < ApplicationController
   end
 
   def show
-    @genre = Genre.find(params[:id])
+    @genre = Genre.find_by_id(id: params[:id])
   end
 
   def new
@@ -42,4 +42,9 @@ class GenresController < ApplicationController
     #throws up a message letting the user know the genre was deleted
     redirect_to genres_path #redirects to the index view (genres_path)
   end
+
+  private
+    def genre_params
+      params.require(:genre).permit(:name)
+    end
 end

@@ -4,7 +4,7 @@ class BooksController < ApplicationController
   end
 
   def show
-    @book = Book.find(id: params[:id])
+    @book = Book.find_by_id(id: params[:id])
   end
 
   def new
@@ -12,43 +12,51 @@ class BooksController < ApplicationController
   end
 
   def create
-    @book = Book.new(book_params)
-    @book.save #uses the genre_params put into the form at new.html.erb
+    @book = Book.create(book_params)
     if @book.save
-      redirect_to books_path ##THIS COULD BE @book
-      #if it the genre_params are valid it saves to the genre to db and redirects to the show page for that genre
+      redirect_to book_path(@book)
     else
-      render :new #if it the genre_params are not valid it renders the new view for the user try creating a genre
+      render :new
+    #uses the book_params put into the form at new.html.erb
+    #if the book_params are valid it saves to the book to db and redirects to the show page for that book
+    #if it the book_params are not valid it renders the new view for the user try creating a book
     end
   end
 
   def edit
-    @book = Book.find(params[:id])#uses the inputted genre_id to look for a genre. If it finds one, sets the current genre(@genre) to the genre with that id
+    @book = Book.find_by_id(id: params[:id])
+    #uses the inputted book_id to look for a book. If it finds one, sets the current book(@book) to the book with that id
   end
 
   def update
-    @book = Book.find(params[:id])
-    @book.update(book_params)
-      if @book.save
-        redirect_to book_path(@book) ##THIS COULD BE @genre
-        #uses the inputted genre_id to look for a genre. If it finds one sets the current genre(@genre) to the genre with that id
-      else
-        renders :edit#allows the user to make changes to the params for the genre (genre_params)
-      end
+    book = Book.find_by_id(id: params[:id])
+    book.update(book_params)
+    if book.save
+      redirect_to book_path(book)
+    else
+      render :edit
+    end
+    #uses the inputted book_id to look for a book. If it finds one sets the current book(book) to the book with that id
+    #allows the user to make changes to the params for the book(book_params)
   end
 
   def destroy
-    @book = Book.find(params[:id])#uses the genre_id that was input to set the working genre
-    @book.destroy
-    #throws up a message letting the user know the genre was deleted
-    redirect_to books_path #redirects to the index view (genres_path)
+    @book = book.find_by_id(id: params[:id])
+    @book.delete
+    redirect_to books_path
+    #uses the book_id that was input to set the working book
+    #@book.destroy
+    #throws up a message letting the user know the book was deleted
+    #redirects to the index view (books_path)
   end
 
   private
     def book_params
       params.require(:book).permit(
         :title,
-        :author
+        :author,
+        :user_id,
+        :genre_id
       )
     end
 end

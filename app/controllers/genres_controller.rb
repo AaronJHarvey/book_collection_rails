@@ -26,7 +26,7 @@ class GenresController < ApplicationController
   end
 
   def update
-    @genre = Genre.find(params[:id])
+    @genre = Genre.find_by_id(id: params[:id])
     @genre.update(genre_params)
       if @genre.save
         redirect_to genre_path(@genre) ##THIS COULD BE @genre

@@ -8,13 +8,13 @@ class BooksController < ApplicationController
   end
 
   def new
-    @book = Book.new
+    @book = Book.create
   end
 
   def create
-    @book = Book.create(book_params)
+    @book = Book.create(book_params.merge(user_id: session[:id]))
     if @book.save
-      redirect_to book_path(@book)
+      redirect_to books_path
     else
       render :new
     #uses the book_params put into the form at new.html.erb

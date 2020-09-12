@@ -6,8 +6,7 @@ class UsersController < ApplicationController
   def create
     @user = User.create(user_params)
     if @user.save
-
-      redirect_to user_path(user)
+      redirect_to books_path
       #if the user_params entered are valid set user as the user being created
       #make make the session[:id] the user.id
       #redirect to the user (user_path(user))

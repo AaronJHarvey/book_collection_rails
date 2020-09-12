@@ -1,18 +1,22 @@
 class BooksController < ApplicationController
   def index
-    @books = Book.all
+    if params[:genre_id]
+      @books = Genre.find(params[:genre_id]).books
+    else
+      @books = Book.all
+    end
   end
 
   def show
-    @book = Book.find_by_id(id: params[:id])
+    @book = Book.find(params[:id])
   end
 
   def new
-    @book = Book.create
+    @book = Book.new(genre_id: params[:genre_id])
   end
 
   def create
-    @book = Book.create(book_params.merge(user_id: session[:id]))
+    @book = Book.create(book_params)
     if @book.save
       redirect_to books_path
     else

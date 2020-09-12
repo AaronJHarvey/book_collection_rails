@@ -3,10 +3,6 @@ class GenresController < ApplicationController
     @genres = Genre.all
   end
 
-  def show
-    @genre = Genre.find_by_id(id: params[:id])
-  end
-
   def new
     @genre = Genre.new
   end
@@ -14,7 +10,7 @@ class GenresController < ApplicationController
   def create
     @genre = Genre.new(genre_params)#uses the genre_params put into the form at new.html.erb
     if @genre.save
-      redirect_to genre_path(@genre) ##THIS COULD BE @genre
+      redirect_to @genre ##THIS COULD BE @genre
       #if it the genre_params are valid it saves to the genre to db and redirects to the show page for that genre
     else
       render :new #if it the genre_params are not valid it renders the new view for the user try creating a genre
@@ -29,7 +25,7 @@ class GenresController < ApplicationController
     @genre = Genre.find_by_id(id: params[:id])
     @genre.update(genre_params)
       if @genre.save
-        redirect_to genre_path(@genre) ##THIS COULD BE @genre
+        redirect_to @genre ##THIS COULD BE @genre
         #uses the inputted genre_id to look for a genre. If it finds one sets the current genre(@genre) to the genre with that id
       else
         renders :edit#allows the user to make changes to the params for the genre (genre_params)
@@ -42,6 +38,8 @@ class GenresController < ApplicationController
     #throws up a message letting the user know the genre was deleted
     redirect_to genres_path #redirects to the index view (genres_path)
   end
+
+
 
   private
     def genre_params
